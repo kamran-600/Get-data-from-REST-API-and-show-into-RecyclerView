@@ -4,20 +4,44 @@ import java.util.ArrayList;
 
 public class DataModal {
 
-    public String status, message;
+    public String message;
+    public int status;
     public ArrayList<Subdata> data;
 
-    public DataModal(String status, String message, ArrayList<Subdata> data) {
+    public DataModal(int status, String message, ArrayList<Subdata> data) {
         this.status = status;
         this.message = message;
         this.data = data;
     }
 
-    public class Subdata {
-        private int flag;
-        private String countries_name, country_code, countries_id, countries_iso_code;
+    public int getStatus() {
+        return status;
+    }
 
-        public Subdata(int flag, String countries_name, String country_code, String countries_id, String countries_iso_code) {
+    public void setStatus(int status) {
+        this.status = status;
+    }
+
+    public String getMessage() {
+        return message;
+    }
+
+    public void setMessage(String message) {
+        this.message = message;
+    }
+
+    public ArrayList<Subdata> getData() {
+        return data;
+    }
+
+    public void setData(ArrayList<Subdata> data) {
+        this.data = data;
+    }
+
+    public static class Subdata {
+        private String flag,countries_name, country_code, countries_id, countries_iso_code;
+
+        public Subdata(String flag, String countries_name, String country_code, String countries_id, String countries_iso_code) {
             this.flag = flag;
             this.countries_name = countries_name;
             this.country_code = country_code;
@@ -25,11 +49,11 @@ public class DataModal {
             this.countries_iso_code = countries_iso_code;
         }
 
-        public int getFlag() {
+        public String  getFlag() {
             return flag;
         }
 
-        public void setFlag(int flag) {
+        public void setFlag(String flag) {
             this.flag = flag;
         }
 

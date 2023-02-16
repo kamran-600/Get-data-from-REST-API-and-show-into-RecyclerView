@@ -7,6 +7,6 @@ import retrofit2.http.GET;
 
 public interface ApiFetch {
 
-    @GET("getCountries?status=200")
-    Call<ArrayList<DataModal>> getData();
+    @GET("?status=200")
+    Call<DataModal> getData();
 }
