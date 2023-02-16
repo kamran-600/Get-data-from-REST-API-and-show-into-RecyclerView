@@ -11,14 +11,16 @@ import android.widget.Toast;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.bumptech.glide.Glide;
+
 import java.util.ArrayList;
 
 public class RecAdapter extends RecyclerView.Adapter<RecAdapter.Viewholder> {
 
     Context context;
-    ArrayList<DataModal> list;
+    ArrayList<DataModal.Subdata> list;
 
-    public RecAdapter(Context context, ArrayList<DataModal> list) {
+    public RecAdapter(Context context, ArrayList<DataModal.Subdata> list) {
         this.context = context;
         this.list = list;
     }
@@ -33,9 +35,9 @@ public class RecAdapter extends RecyclerView.Adapter<RecAdapter.Viewholder> {
 
     @Override
     public void onBindViewHolder(@NonNull RecAdapter.Viewholder holder, int position) {
-        holder.imageView.setImageResource(list.get(position).Subdata.getImage());
-        holder.name.setText(list.get(position).Subdata.getCountryName());
-        holder.code.setText(list.get(position).getCountryCode());
+        Glide.with(context).load(list.get(position).getFlag()).into(holder.imageView);
+        holder.name.setText(list.get(position).getCountries_name());
+        holder.code.setText(list.get(position).getCountry_code());
 
         holder.itemView.setOnClickListener(v -> {
             Toast.makeText(context, position +"element is clicked", Toast.LENGTH_SHORT).show();

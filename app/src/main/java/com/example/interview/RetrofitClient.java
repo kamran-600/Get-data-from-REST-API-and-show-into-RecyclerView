@@ -9,7 +9,7 @@ public class RetrofitClient {
 
     private RetrofitClient(){
         retrofit = new Retrofit.Builder()
-                .baseUrl("https://bpj.scf.mybluehost.me/mylocalbusiness/")
+                .baseUrl("https://bpj.scf.mybluehost.me/mylocalbusiness/getCountries/")
                 .addConverterFactory(GsonConverterFactory.create())
                 .build();
     }
