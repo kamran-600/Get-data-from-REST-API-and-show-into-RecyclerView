@@ -4,6 +4,8 @@ import android.content.Context;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Filter;
+import android.widget.Filterable;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -14,15 +16,18 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.bumptech.glide.Glide;
 
 import java.util.ArrayList;
+import java.util.Collection;
 
-public class RecAdapter extends RecyclerView.Adapter<RecAdapter.Viewholder> {
+public class RecAdapter extends RecyclerView.Adapter<RecAdapter.Viewholder> implements Filterable {
 
     Context context;
     ArrayList<DataModal.Subdata> list;
+    ArrayList<DataModal.Subdata> backup;
 
     public RecAdapter(Context context, ArrayList<DataModal.Subdata> list) {
         this.context = context;
         this.list = list;
+        backup = new ArrayList<>(list);
     }
 
     @NonNull
@@ -40,7 +45,8 @@ public class RecAdapter extends RecyclerView.Adapter<RecAdapter.Viewholder> {
         holder.code.setText(list.get(position).getCountry_code());
 
         holder.itemView.setOnClickListener(v -> {
-            Toast.makeText(context, position +"element is clicked", Toast.LENGTH_SHORT).show();
+
+            Toast.makeText(context, position + 1 +" element is clicked", Toast.LENGTH_SHORT).show();
         });
 
     }
@@ -49,6 +55,40 @@ public class RecAdapter extends RecyclerView.Adapter<RecAdapter.Viewholder> {
     public int getItemCount() {
         return list.size();
     }
+
+    @Override
+    public Filter getFilter() {
+        return filter;
+    }
+    Filter filter = new Filter() {
+        // run on Background thread
+        @Override
+        protected FilterResults performFiltering(CharSequence constraint) {
+            ArrayList<DataModal.Subdata> filteredlist = new ArrayList<>();
+            if(constraint.toString().isEmpty()){
+                filteredlist.addAll(backup);
+            }
+            else {
+                for(DataModal.Subdata obj : backup){
+                    if(obj.getCountries_name().toLowerCase().contains(constraint.toString().toLowerCase())){
+                        filteredlist.add(obj);
+                    }
+                }
+            }
+            FilterResults filterResults = new FilterResults();
+            filterResults.values = filteredlist;
+            return filterResults;
+        }
+
+        // run on main UI thread
+        @Override
+        protected void publishResults(CharSequence constraint, FilterResults results) {
+                list.clear();
+                list.addAll((Collection<? extends DataModal.Subdata>) results.values);
+                notifyDataSetChanged();
+        }
+    };
+
     public static class Viewholder extends RecyclerView.ViewHolder{
 
         ImageView imageView;
