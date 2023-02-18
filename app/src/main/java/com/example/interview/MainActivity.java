@@ -2,28 +2,24 @@ package com.example.interview;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.widget.SearchView;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import android.os.Bundle;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.widget.TextView;
-import android.widget.Toast;
-
-import java.io.IOException;
 import java.util.ArrayList;
-
-import okhttp3.Request;
-import okio.Timeout;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
-import retrofit2.Retrofit;
-import retrofit2.converter.gson.GsonConverterFactory;
 
 public class MainActivity extends AppCompatActivity {
 
     RecyclerView recyclerView;
     ArrayList<DataModal.Subdata> list = new ArrayList<>();
+    RecAdapter adapter;
     TextView textView;
 
     @Override
@@ -43,7 +39,7 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onResponse(@NonNull Call<DataModal> call, @NonNull Response<DataModal> response) {
                 list = response.body().getData();
-                RecAdapter adapter = new RecAdapter(MainActivity.this,list);
+                adapter = new RecAdapter(MainActivity.this,list);
                 LinearLayoutManager layoutManager = new LinearLayoutManager(MainActivity.this);
                 layoutManager.setOrientation(RecyclerView.VERTICAL);
                 recyclerView.setLayoutManager(layoutManager);
@@ -55,23 +51,27 @@ public class MainActivity extends AppCompatActivity {
                 textView.setText(t.getMessage());
             }
         });
-      /*  repo.enqueue(new Callback<ArrayList<DataModal>>() {
+    }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        getMenuInflater().inflate(R.menu.main_menu,menu);
+        MenuItem menuItem = menu.findItem(R.id.search_item);
+        SearchView searchView = (SearchView) menuItem.getActionView();
+
+        searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
             @Override
-            public void onResponse(Call<DataModal> call, Response<DataModal> response) {
-                list1 = response.body();
-                RecAdapter adapter = new RecAdapter(MainActivity.this,list.g);
-                LinearLayoutManager layoutManager = new LinearLayoutManager(MainActivity.this);
-                layoutManager.setOrientation(RecyclerView.VERTICAL);
-                recyclerView.setLayoutManager(layoutManager);
-                recyclerView.setAdapter(adapter);
+            public boolean onQueryTextSubmit(String query) {
+                return false;
             }
 
             @Override
-            public void onFailure(Call<ArrayList<DataModal>> call, Throwable t) {
-
+            public boolean onQueryTextChange(String newText) {
+                adapter.getFilter().filter(newText);
+                return false;
             }
         });
 
-       */
+        return super.onCreateOptionsMenu(menu);
     }
 }
